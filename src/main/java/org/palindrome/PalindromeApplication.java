@@ -1,11 +1,13 @@
 package org.palindrome;
 
-import java.util.Arrays;
+import io.vavr.collection.Stream;
 
 public class PalindromeApplication {
-    public void main(String[] args) {
-        String input = Arrays.stream(args).reduce((x, y) -> x + y).orElse("");
-        System.out.println(new PalindromeDetector(input).findPalindromes());
+    public static void main(String[] args){
+        String input = args[0];
+        Stream<String> output = new PalindromeDetector(input).findPalindromes();
+        String formatted = new Formatter(input).format(output);
+        System.out.println(formatted);
     }
 }
 

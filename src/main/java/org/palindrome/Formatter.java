@@ -1,5 +1,9 @@
 package org.palindrome;
 
+import java.util.stream.Collectors;
+
+import io.vavr.collection.Stream;
+
 public class Formatter {
     private final String input;
     
@@ -7,7 +11,13 @@ public class Formatter {
         this.input = input;
     }
     
-    public String format(String... palindromes){
-        return String.format("Text: %s, Index: %d, Length: %d", palindromes[0], input.indexOf(palindromes[0]), palindromes[0].length());
+    public String format(Stream<String> palindromes){
+        return palindromes.map(palindrome -> 
+                String.format("Text: %s, Index: %d, Length: %d", 
+                    palindrome, 
+                    input.indexOf(palindrome), 
+                    palindrome.length()
+                )
+            ).collect(Collectors.joining("\n"));
     }
 }
