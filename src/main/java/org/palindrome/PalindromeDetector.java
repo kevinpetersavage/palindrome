@@ -12,21 +12,29 @@ public class PalindromeDetector {
     }
 
     public Stream<String> findPalindromes() {
-        return Stream
-                .range(0, this.input.length() - 1)
-                .map(x -> this.input.length() - x)
-                .flatMap(this::possibleRanges)
-                .map(tuple -> input.substring(tuple._1, tuple._2))
-                .filter(substring -> substring.equals(new StringBuilder(substring).reverse().toString()))
+        return intervalsInShorteningOrder()
+                .map(interval -> input.substring(interval._1, interval._2))
+                .filter(substring -> substring.equals(reverse(substring)))
                 .distinctBy((string1,string2) -> string2.contains(string1) ? 0 : 1)
                 .take(3);
     }
+    
+    private Stream<Tuple2<Integer, Integer>> intervalsInShorteningOrder(){
+        return Stream
+                .range(0, this.input.length() - 1)
+                .map(x -> this.input.length() - x)
+                .flatMap(this::possibleIntervals);
+    }
 
-    private Stream<Tuple2<Integer, Integer>> possibleRanges(int rangeLength) {
+    private Stream<Tuple2<Integer, Integer>> possibleIntervals(int rangeLength) {
         return Stream
             .range(0, this.input.length() - rangeLength)
             .map(i -> Tuple.of(i, i + rangeLength + 1));
     }
+    
+    private String reverse(String string){
+        return new StringBuilder(string).reverse().toString();
+    } 
 }
 
 
